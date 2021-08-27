@@ -1,0 +1,17 @@
+package main
+
+import (
+	"cryptopals/utils/pkcs7"
+	"fmt"
+	"log"
+)
+
+func main() {
+	goodText := "ICE ICE BABY\x04\x04\x04\x04"
+	text, err := pkcs7.ValidatePadding([]byte(goodText))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+
+}

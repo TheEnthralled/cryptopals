@@ -1,0 +1,83 @@
+package mt19937
+
+// https://en.wikipedia.org/wiki/Mersenne_Twister
+
+import(
+	"log"
+)
+
+const (
+	w = 64
+	n = 312
+	m = 156
+	r = 31
+	a = 0xB5026F5AA96619E9
+	u = 29
+	d = 0x5555555555555555
+	s = 17
+	b = 0x71D67FFFEDA60000
+	t = 37
+	c = 0xFFF7EEE000000000
+	l = 43
+	f = 6364136223846793005
+	lower_mask = (1 << r) - 1
+	upper_mask = ((1 << w) - 1) ^ lower_mask
+	lower_w = (1 << w) - 1
+)
+
+type twister struct {
+	mt []uint64
+	index int
+}
+
+type MT19937_64 struct {
+	*twister
+}
+
+func New() MT19937_64 {
+	return MT19937_64{&twister{make([]uint64, n), n+1}}
+}
+
+func (tw *twister) Seed(s int64) {
+	seed := uint64(s)
+	tw.index = n
+	tw.mt[0] = seed
+	for i := 1; i < n; i++ {
+		tw.mt[i] = (f * (tw.mt[i-1] ^ (tw.mt[i-1] >> (w-2))) + uint64(i)) & lower_w
+	}
+}
+
+
+func (tw *twister) Int63() int64 {
+	if tw.index >= n {
+		if tw.index > n {
+			log.Fatal("mt19937: must seed the RNG first.")
+		}
+		tw.twist()
+	}
+
+	y := tw.mt[tw.index]
+	y = y ^ ((y >> u) & d)
+	y = y ^ ((y << s) & b)
+	y = y ^ ((y << t) & c)
+	y = y ^ (y >> l)
+
+	tw.index++
+	return int64(y)
+}
+
+
+
+func (tw *twister) twist() {
+	for i := 0; i < n; i++ {
+		x := (tw.mt[i] & upper_mask) | (tw.mt[(i+1) % n] & lower_mask)
+		xA := x >> 1
+		if x % 2 != 0 {
+			xA = xA ^ a
+		}
+		tw.mt[i] = tw.mt[(i+m) % n] ^ xA
+	}
+	tw.index = 0
+}
+
+

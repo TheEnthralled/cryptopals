@@ -1,0 +1,13 @@
+package mt19937_test
+
+import (
+	"testing"
+	"fmt"
+	"github.com/seehuhn/mt19937"
+	. "cryptopals/utils/mt19937"
+	"math/rand"
+)
+
+func TestMT19937(t * testing.T){
+	rng1 := rand.New(New())
+}	

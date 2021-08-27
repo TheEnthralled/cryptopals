@@ -1,0 +1,19 @@
+package main
+
+import(
+	"cryptopals/utils/mt19937"
+	"math/rand"
+	"fmt"
+	"time"
+)
+
+
+func main() {
+	rng1 := rand.New(mt19937.New())
+	seed := time.Now().UnixNano()
+	rng1.Seed(seed)
+
+	for i := 0; i < 10; i++ {
+		fmt.Println(uint64(rng1.Int63()))
+	}
+}

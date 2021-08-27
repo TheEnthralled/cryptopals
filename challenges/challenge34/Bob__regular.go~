@@ -1,0 +1,33 @@
+package main
+
+import(
+	"net"
+	"log"
+	"io"
+	"fmt"
+	"bytes"
+)
+
+
+func BobRegular() {
+	l, err := net.Listen("tcp", ":" + BOB_PORT)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer l.Close()
+
+	fmt.Println("Listening...")
+	
+	conn, err := l.Accept()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Got connection...")
+	
+	var _b bytes.Buffer
+	io.Copy(&_b, conn)
+	b := _b.Bytes()
+
+	fmt.Println(b)
+}

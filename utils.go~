@@ -1,0 +1,17 @@
+package utils
+
+import(
+
+
+)
+
+
+func RandBytes(numBYtes uint) []byte {
+
+
+}
+
+func ConcatBytes(first, second []byte) []byte {
+
+
+}
