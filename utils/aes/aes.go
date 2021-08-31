@@ -9,6 +9,8 @@ import (
 	"encoding/binary"
 )
 
+// TODO: throw error is key is not EXACTLY 16 bytes long.
+
 func Encrypt_ECB_PKCS7(key []byte, plainText []byte) []byte {
 	block, err := aes.NewCipher(key)
 	if err != nil {
